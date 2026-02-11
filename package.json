@@ -1,0 +1,33 @@
+{
+  "name": "artgallery_updated_server",
+  "module": "src/server.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun run src/server.ts",
+    "lint": "echo \"no lint configured\"",
+    "format": "echo \"no formatter configured\""
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^25.2.3",
+    "@types/pg": "^8.16.0",
+    "pino-pretty": "^13.1.3",
+    "prisma": "^7.3.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "better-auth": "^1.4.18",
+    "dotenv": "^17.2.4",
+    "hono": "^4.11.9",
+    "pg": "^8.18.0",
+    "pino": "^10.3.1",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
+  }
+}

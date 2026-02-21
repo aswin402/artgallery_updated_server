@@ -1,10 +1,9 @@
 import { Hono } from "hono";
-import { logger as httpLogger } from "hono/logger";
 import { cors } from "hono/cors";
-
+import { serveStatic } from "hono/bun";
+import { logger as httpLogger } from "hono/logger";
 import { logger } from "./utils/logger";
 import { globalErrorHandler } from "./middleware/error";
-import { serveStatic } from "hono/bun";
 import path from "path";
 import artRouter from "./routes/art.route";
 
@@ -45,14 +44,20 @@ app.get("/health", (c) => {
 
 
 
-app.use(
-  "/uploads/*",
-  serveStatic({
-    path: path.join(process.cwd(), "uploads"),
-  })
-);
+app.use("/uploads/*", async (c, next) => {
+  const filePath = path.join(process.cwd(), "uploads", c.req.path.replace("/uploads/", ""));
+  try {
+    const file = Bun.file(filePath);
+    if (await file.exists()) {
+      return new Response(file);
+    }
+  } catch (error) {
+    console.error("File not found:", filePath);
+  }
+  await next();
+});
 
-app.route("/arts", artRouter);
+app.route("/art", artRouter);
  // 404 handler
 app.notFound((c) =>
   c.json({ message: "Route not found" }, 404)
